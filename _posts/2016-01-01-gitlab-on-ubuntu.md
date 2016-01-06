@@ -90,7 +90,7 @@ for creating backup archives of the GitLab data.
 Define a new task in */opt/gitlab/embedded/service/gitlab-rails/lib/tasks/gitlab/backup_config.rake*
 for archiving the GitLab configuration files:
 
-```ruby
+```
 namespace :gitlab do
   namespace :backup_config do
 
@@ -153,7 +153,6 @@ namespace :gitlab do
         $progress = $stdout
       end
     end
-    
   end
 end
 ```

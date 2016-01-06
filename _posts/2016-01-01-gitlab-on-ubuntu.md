@@ -90,7 +90,7 @@ for creating backup archives of the GitLab data.
 Define a new task in */opt/gitlab/embedded/service/gitlab-rails/lib/tasks/gitlab/backup_config.rake*
 for archiving the GitLab configuration files:
 
-```
+```ruby
 namespace :gitlab do
   namespace :backup_config do
 
@@ -229,8 +229,9 @@ DUPL_PARAMS="$DUPL_PARAMS --full-if-older-than $MAX_FULLBKP_AGE "
 
 Create the backup script */etc/cron.daily/gitlab* which will be executed by [Cron](https://en.wikipedia.org/wiki/Cron) daily:
 
-```
+```sh
 #!/bin/sh
+
 gitlab-rake gitlab:backup:create
 /root/bin/gitlab-rake-privileged gitlab:backup_config:create
 duply gitlab purge-full

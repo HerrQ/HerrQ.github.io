@@ -17,8 +17,12 @@ url: "http://yourdomain.com" # the base hostname & protocol for your site
 # twitter_username: jekyllrb
 github_username:  HerrQ
 
-# Build settings
+# Conversion
 markdown: kramdown
 
-# Serve settings
+# Conversion - Kramdown Processor
+kramdown:
+  input: GFM
+
+# Serving
 host: 0.0.0.0

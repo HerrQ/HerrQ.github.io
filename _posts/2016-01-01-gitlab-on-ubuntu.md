@@ -137,6 +137,7 @@ namespace :gitlab do
         $progress = $stdout
       end
     end
+
   end
 end
 ```

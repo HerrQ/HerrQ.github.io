@@ -6,10 +6,7 @@ categories: GitLab Ubuntu
 
 ## About this document
 
-This document will guide you through installing [GitLab](http://gitlab.com) on an Ubuntu-based system.
-After successful installation the GitLab web interface will be accessible at
-[https://danielflecken.de:444](https://danielflecken.de:444).
-Since GitLab must be configured as the root application and we want to also serve other SSL-secured web applications from the same host, we are using the non-standard port 444 for the SSL-HTTP connection.
+This document will guide you through installing [GitLab](http://gitlab.com) on an Ubuntu-based system. After successful installation the GitLab web interface will be accessible at [https://danielflecken.de:444](https://danielflecken.de:444). Since GitLab must be configured as the root application and we want to also serve other SSL-secured web applications from the same host, we are using the non-standard port 444 for the SSL-HTTP connection.
 
 The installation was tested with:
 
@@ -41,12 +38,8 @@ Place the SSL files inside GitLab's configuration direcory:
 - Private key: */etc/gitlab/ssl/danielflecken.de.key*
 - Public certificate: */etc/gitlab/ssl/danielflecken.de.crt*
 
-> Note: The file names follow the GitLab naming conventions
-> so they can be found by GitLab automatically
-> (hostname plus suffixes *.key* and *.crt* respectively).
-> If you already have the SSL files somewhere else on the server,
-> you can create symbolic links to them,
-> using the file names mentioned here as link names.
+> Note:
+> The file names follow the GitLab naming conventions so they can be found by GitLab automatically (hostname plus suffixes *.key* and *.crt* respectively). If you already have the SSL files somewhere else on the server, you can create symbolic links to them, using the file names mentioned here as link names.
 
 Make sure the private key can only be read by user *root*:
 
@@ -60,11 +53,10 @@ Modify the GitLab base URL in the configuration file */etc/gitlab/gitlab.rb*:
 external_url 'https://danielflecken.de:444'
 ```
 
-> Note: GitLab will automatically serve its content
-> from the port you specify in *external_url*.
+> Note:
+> GitLab will automatically serve its content from the port you specify in *external_url*.
 
-Modify the configuration file to make GitLab delete old backups
-after 7 days (604,800 seconds):
+Modify the configuration file to make GitLab delete old backups after 7 days (604,800 seconds):
 
 ```
 gitlab_rails['backup_keep_time'] = 604800
@@ -78,17 +70,9 @@ gitlab-ctl reconfigure
 
 ## 3) Automating backups
 
-We will create daily backups of our GitLab installation
-and the GitLab configuration files.
-The directory holding the backups will be synchronized
-into an [Amazon S3](https://aws.amazon.com/s3/) bucket.
-For encrypted synchronization we will use [Duply](http://duply.net/),
-a frontend for [Duplicity](http://duplicity.nongnu.org/).
+We will create daily backups of our GitLab installation and the GitLab configuration files. The directory holding the backups will be synchronized into an [Amazon S3](https://aws.amazon.com/s3/) bucket. For encrypted synchronization we will use [Duply](http://duply.net/), a frontend for [Duplicity](http://duplicity.nongnu.org/).
 
-GitLab has a pre-defined [Rake](http://rake.rubyforge.org) task
-for creating backup archives of the GitLab data.
-Define a new task in */opt/gitlab/embedded/service/gitlab-rails/lib/tasks/gitlab/backup_config.rake*
-for archiving the GitLab configuration files:
+GitLab has a pre-defined [Rake](http://rake.rubyforge.org) task for creating backup archives of the GitLab data. Define a new task in */opt/gitlab/embedded/service/gitlab-rails/lib/tasks/gitlab/backup_config.rake* for archiving the GitLab configuration files:
 
 ```ruby
 namespace :gitlab do
@@ -157,9 +141,7 @@ namespace :gitlab do
 end
 ```
 
-Since the default wrapper (*/opt/gitlab/bin/gitlab-rake*) for invoking GitLab tasks
-does not allow running tasks as root user, we have to define our own wrapper
-as */root/bin/gitlab-rake-privileged*:
+Since the default wrapper (*/opt/gitlab/bin/gitlab-rake*) for invoking GitLab tasks does not allow running tasks as root user, we have to define our own wrapper as */root/bin/gitlab-rake-privileged*:
 
 ```sh
 #!/bin/sh
@@ -201,16 +183,14 @@ Create a basic Duply configuration file:
 duply gitlab create
 ```
 
-Enable symmetric-key encryption for the backups that will be uploaded to Amazon S3
-in the newly created configuration file */root/.duply/gitlab/conf*:
+Enable symmetric-key encryption for the backups that will be uploaded to Amazon S3 in the newly created configuration file */root/.duply/gitlab/conf*:
 
 ```
 #GPG_KEY='_KEY_ID_'
 GPG_PW='...'
 ```
 
-Set the Amazon S3 synchronization target, your S3 access credentials
-and the source directory to be synchronized:
+Set the Amazon S3 synchronization target, your S3 access credentials and the source directory to be synchronized:
 
 ```
 TARGET='s3://s3-eu-west-1.amazonaws.com/danielflecken.de/GitLab'
@@ -239,13 +219,7 @@ duply gitlab backup
 ```
 
 > Background information:
-> The script creates data backups (*TIMESTAMP\_gitlab\_backup.tar*)
-> and configuration backups (*TIMESTAMP\_gitlab\_config\_backup.tar*) of GitLab
-> in */var/opt/gitlab/backups*.
-> The configuation backups contain the GitLab configuration file (*/etc/gitlab/gitlab.rb*)
-> and the file holding the database encryption key used for two-factor authentication
-> (*/etc/gitlab/gitlab-secrets.json*).
-> The directory */var/opt/gitlab/backups* is then remotely synchronized by the script.
+> The script creates data backups (*TIMESTAMP\_gitlab\_backup.tar*) and configuration backups (*TIMESTAMP\_gitlab\_config\_backup.tar*) of GitLab in */var/opt/gitlab/backups*. The configuation backups contain the GitLab configuration file (*/etc/gitlab/gitlab.rb*) and the file holding the database encryption key used for two-factor authentication (*/etc/gitlab/gitlab-secrets.json*). The directory */var/opt/gitlab/backups* is then remotely synchronized by the script.
 
 Make the backup script executable:
 

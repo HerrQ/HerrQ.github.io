@@ -22,11 +22,13 @@ All commands mentioned in this guide must be executed as user *root*.
 ## 1) Base installation
 
 Install the packages GitLab depends on:
+
 ```
 apt-get install curl openssh-server ca-certificates postfix
 ```
 
 Add the GitLab package server and install the package:
+
 ```
 curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash
 apt-get install gitlab-ce
@@ -47,11 +49,13 @@ Place the SSL files inside GitLab's configuration direcory:
 > using the file names mentioned here as link names.
 
 Make sure the private key can only be read by user *root*:
+
 ```
 chmod u=rw,g=r,o= /etc/gitlab/ssl/danielflecken.de.key
 ```
 
 Modify the GitLab base URL in the configuration file */etc/gitlab/gitlab.rb*:
+
 ```
 external_url 'https://danielflecken.de:444'
 ```
@@ -61,11 +65,13 @@ external_url 'https://danielflecken.de:444'
 
 Modify the configuration file to make GitLab delete old backups
 after 7 days (604,800 seconds):
+
 ```
 gitlab_rails['backup_keep_time'] = 604800
 ```
 
 Auto-configure and start GitLab:
+
 ```
 gitlab-ctl reconfigure
 ```
@@ -83,6 +89,7 @@ GitLab has a pre-defined [Rake](http://rake.rubyforge.org) task
 for creating backup archives of the GitLab data.
 Define a new task in */opt/gitlab/embedded/service/gitlab-rails/lib/tasks/gitlab/backup_config.rake*
 for archiving the GitLab configuration files:
+
 ```
 namespace :gitlab do
   namespace :backup_config do
@@ -154,6 +161,7 @@ end
 Since the default wrapper (*/opt/gitlab/bin/gitlab-rake*) for invoking GitLab tasks
 does not allow running tasks as root user, we have to define our own wrapper
 as */root/bin/gitlab-rake-privileged*:
+
 ```
 #!/bin/sh
 
@@ -177,22 +185,26 @@ exec /opt/gitlab/embedded/bin/chpst -e /opt/gitlab/etc/gitlab-rails/env -U ${git
 ```
 
 Make this wrapper executable:
+
 ```
 chmod u=rwx,g=rx,o= /root/bin/gitlab-rake-privileged
 ```
 
 Install Duply and Duplicity:
+
 ```
 apt-get install duplicity duply
 ```
 
 Create a basic Duply configuration file:
+
 ```
 duply gitlab create
 ```
 
 Enable symmetric-key encryption for the backups that will be uploaded to Amazon S3
 in the newly created configuration file */root/.duply/gitlab/conf*:
+
 ```
 #GPG_KEY='_KEY_ID_'
 GPG_PW='...'
@@ -200,6 +212,7 @@ GPG_PW='...'
 
 Set the Amazon S3 synchronization target, your S3 access credentials
 and the source directory to be synchronized:
+
 ```
 TARGET='s3://s3-eu-west-1.amazonaws.com/danielflecken.de/GitLab'
 TARGET_USER='...'
@@ -208,6 +221,7 @@ SOURCE='/var/opt/gitlab/backups'
 ```
 
 Make Duply create a full backup every month and delete full backups older than 12 months:
+
 ```
 MAX_FULL_BACKUPS=12
 MAX_FULLBKP_AGE=1M
@@ -215,6 +229,7 @@ DUPL_PARAMS="$DUPL_PARAMS --full-if-older-than $MAX_FULLBKP_AGE "
 ```
 
 Create the backup script */etc/cron.daily/gitlab* which will be executed by [Cron](https://en.wikipedia.org/wiki/Cron) daily:
+
 ```
 #!/bin/sh
 gitlab-rake gitlab:backup:create
@@ -233,6 +248,7 @@ duply gitlab backup
 > The directory */var/opt/gitlab/backups* is then remotely synchronized by the script.
 
 Make the backup script executable:
+
 ```
 chmod u=rwx,g=rx,o=rx /etc/cron.daily/gitlab
 ```

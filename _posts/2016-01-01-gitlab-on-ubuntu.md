@@ -90,7 +90,7 @@ for creating backup archives of the GitLab data.
 Define a new task in */opt/gitlab/embedded/service/gitlab-rails/lib/tasks/gitlab/backup_config.rake*
 for archiving the GitLab configuration files:
 
-```
+```ruby
 namespace :gitlab do
   namespace :backup_config do
 
@@ -162,7 +162,7 @@ Since the default wrapper (*/opt/gitlab/bin/gitlab-rake*) for invoking GitLab ta
 does not allow running tasks as root user, we have to define our own wrapper
 as */root/bin/gitlab-rake-privileged*:
 
-```
+```sh
 #!/bin/sh
 
 error_echo()

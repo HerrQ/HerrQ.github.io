@@ -1,3 +1,9 @@
+---
+layout: post
+title: "GitLab on Ubuntu"
+categories: GitLab Ubuntu
+---
+
 ## About this document
 
 This document will guide you through installing [GitLab](http://gitlab.com) on an Ubuntu-based system.

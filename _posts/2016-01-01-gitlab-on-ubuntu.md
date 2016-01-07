@@ -38,7 +38,7 @@ Place the SSL files inside GitLab's configuration direcory:
 - Private key: */etc/gitlab/ssl/danielflecken.de.key*
 - Public certificate: */etc/gitlab/ssl/danielflecken.de.crt*
 
-> Note:
+> Note:  
 > The file names follow the GitLab naming conventions so they can be found by GitLab automatically (hostname plus suffixes *.key* and *.crt* respectively). If you already have the SSL files somewhere else on the server, you can create symbolic links to them, using the file names mentioned here as link names.
 
 Make sure the private key can only be read by user *root*:
@@ -53,7 +53,7 @@ Modify the GitLab base URL in the configuration file */etc/gitlab/gitlab.rb*:
 external_url 'https://danielflecken.de:444'
 ```
 
-> Note:
+> Note:  
 > GitLab will automatically serve its content from the port you specify in *external_url*.
 
 Modify the configuration file to make GitLab delete old backups after 7 days (604,800 seconds):
@@ -219,7 +219,7 @@ duply gitlab purge-full
 duply gitlab backup
 ```
 
-> Background information:
+> Background information:  
 > The script creates data backups (*TIMESTAMP\_gitlab\_backup.tar*) and configuration backups (*TIMESTAMP\_gitlab\_config\_backup.tar*) of GitLab in */var/opt/gitlab/backups*. The configuation backups contain the GitLab configuration file (*/etc/gitlab/gitlab.rb*) and the file holding the database encryption key used for two-factor authentication (*/etc/gitlab/gitlab-secrets.json*). The directory */var/opt/gitlab/backups* is then remotely synchronized by the script.
 
 Make the backup script executable:

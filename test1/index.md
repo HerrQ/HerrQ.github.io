@@ -6,4 +6,4 @@ permalink: /test1/
 
 Test 1
 
-[[Q.png]]
+[[/test1/Q.png]]

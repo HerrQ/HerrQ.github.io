@@ -18,12 +18,12 @@ url: "http://yourdomain.com" # the base hostname & protocol for your site
 github_username:  HerrQ
 
 # Conversion
-markdown: kramdown
-highlighter: rouge
+markdown: redcarpet
+#highlighter: redcarpet
 
 # Conversion - Kramdown Processor
-kramdown:
-  input: GFM
+#kramdown:
+#  input: GFM
 
 # Serving
 host: 0.0.0.0

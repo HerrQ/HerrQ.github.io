@@ -1,2 +1,2 @@
 #!/bin/sh
-gollum --live-preview --show-all
+gollum --live-preview --allow-uploads=dir --show-all

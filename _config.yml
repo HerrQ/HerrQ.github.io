@@ -15,7 +15,7 @@ github_username:  HerrQ
 markdown: redcarpet
 permalink: pretty
 paginate: 5
-exclude: ["less","node_modules","Gruntfile.js","package.json","README.md","serve-gollum.sh","serve-jekyll.sh"]
+exclude: ["less","node_modules","Gruntfile.js","serve-gollum.sh","serve-jekyll.sh"]
 
 # Serving
 host: 0.0.0.0
